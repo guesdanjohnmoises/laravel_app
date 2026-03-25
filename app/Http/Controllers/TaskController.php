@@ -11,7 +11,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        // TEMPORARY: no database (lab fix)
+        $tasks = [];
+
+        return view('tasks.index', compact('tasks'));
     }
 
     /**
@@ -19,7 +22,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('tasks.create');
     }
 
     /**
@@ -27,7 +30,8 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // No database, just redirect back
+        return redirect('/tasks');
     }
 
     /**
@@ -35,7 +39,13 @@ class TaskController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $task = (object)[
+            'id' => $id,
+            'title' => 'Sample Task',
+            'description' => 'Sample Description'
+        ];
+
+        return view('tasks.show', compact('task'));
     }
 
     /**
@@ -43,7 +53,13 @@ class TaskController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $task = (object)[
+            'id' => $id,
+            'title' => 'Sample Task',
+            'description' => 'Sample Description'
+        ];
+
+        return view('tasks.edit', compact('task'));
     }
 
     /**
@@ -51,7 +67,7 @@ class TaskController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        return redirect('/tasks');
     }
 
     /**
@@ -59,6 +75,6 @@ class TaskController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return redirect('/tasks');
     }
 }
