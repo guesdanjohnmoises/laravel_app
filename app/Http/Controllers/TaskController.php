@@ -3,78 +3,68 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Task;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // Show all tasks
     public function index()
     {
-        // TEMPORARY: no database (lab fix)
-        $tasks = [];
-
+        $tasks = Task::all();
         return view('tasks.index', compact('tasks'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    // Show create form
     public function create()
     {
         return view('tasks.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    // Store new task
     public function store(Request $request)
     {
-        // No database, just redirect back
-        return redirect('/tasks');
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
+        Task::create([
+            'title' => $request->title,
+            'description' => $request->description
+        ]);
+
+        return redirect('/tasks')->with('success', 'Task created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    // Show single task
+    public function show(Task $task)
     {
-        $task = (object)[
-            'id' => $id,
-            'title' => 'Sample Task',
-            'description' => 'Sample Description'
-        ];
-
         return view('tasks.show', compact('task'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    // Show edit form
+    public function edit(Task $task)
     {
-        $task = (object)[
-            'id' => $id,
-            'title' => 'Sample Task',
-            'description' => 'Sample Description'
-        ];
-
         return view('tasks.edit', compact('task'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // Update task
+    public function update(Request $request, Task $task)
     {
-        return redirect('/tasks');
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
+        $task->update($request->all());
+
+        return redirect('/tasks')->with('success', 'Task updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    // Delete task
+    public function destroy(Task $task)
     {
-        return redirect('/tasks');
+        $task->delete();
+        return redirect('/tasks')->with('success', 'Task deleted successfully!');
     }
 }
