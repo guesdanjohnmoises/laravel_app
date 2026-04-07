@@ -1,26 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Task</title>
+    <title>Create Task</title>
+    @vite('resources/css/app.css')
 </head>
-<body>
+<body class="bg-gray-100 p-10">
 
-<h1>Edit Task</h1>
+    <div class="max-w-xl mx-auto bg-white p-6 rounded shadow">
 
-<form action="/tasks/{{ $task->id }}" method="POST">
-    @csrf
-    @method('PUT')
+        <h1 class="text-2xl font-bold mb-4">Create Task</h1>
 
-    <label>Title:</label><br>
-    <input type="text" name="title" value="{{ $task->title }}"><br><br>
+        <form action="{{ route('tasks.store') }}" method="POST">
+            @csrf
 
-    <label>Description:</label><br>
-    <textarea name="description">{{ $task->description }}</textarea><br><br>
+            <label class="block mb-2 font-semibold">Title:</label>
+            <input type="text" name="title"
+                class="w-full border p-2 rounded mb-4">
 
-    <button type="submit">Update</button>
-</form>
+            <label class="block mb-2 font-semibold">Description:</label>
+            <textarea name="description"
+                class="w-full border p-2 rounded mb-4"></textarea>
 
-<a href="/tasks">Back</a>
+            <button type="submit"
+                class="bg-green-500 text-white px-4 py-2 rounded">
+                Save Task
+            </button>
+        </form>
+
+        <a href="{{ route('tasks.index') }}"
+           class="block mt-4 text-blue-500">
+           ← Back
+        </a>
+
+    </div>
 
 </body>
 </html>

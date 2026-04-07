@@ -10,7 +10,7 @@ class TaskController extends Controller
     // Show all tasks
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::latest()->get();
         return view('tasks.index', compact('tasks'));
     }
 
@@ -20,51 +20,19 @@ class TaskController extends Controller
         return view('tasks.create');
     }
 
-    // Store new task
+    // Store task
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'description' => 'required'
+            'title' => 'required|string|max:255',
         ]);
 
         Task::create([
             'title' => $request->title,
-            'description' => $request->description
+            'description' => $request->description,
         ]);
 
-        return redirect('/tasks')->with('success', 'Task created successfully!');
-    }
-
-    // Show single task
-    public function show(Task $task)
-    {
-        return view('tasks.show', compact('task'));
-    }
-
-    // Show edit form
-    public function edit(Task $task)
-    {
-        return view('tasks.edit', compact('task'));
-    }
-
-    // Update task
-    public function update(Request $request, Task $task)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required'
-        ]);
-
-        $task->update($request->all());
-
-        return redirect('/tasks')->with('success', 'Task updated successfully!');
-    }
-
-    // Delete task
-    public function destroy(Task $task)
-    {
-        $task->delete();
-        return redirect('/tasks')->with('success', 'Task deleted successfully!');
+        return redirect()->route('tasks.index')
+                         ->with('success', 'Task created successfully!');
     }
 }
